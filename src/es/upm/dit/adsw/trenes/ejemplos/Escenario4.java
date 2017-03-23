@@ -2,10 +2,13 @@ package es.upm.dit.adsw.trenes.ejemplos;
 
 /**
  * @author Jose A. Manas
- * @version 11/2/2012
+ * @version 21.3.2017
  */
 
-import es.upm.dit.adsw.trenes.*;
+import es.upm.dit.adsw.trenes.Enlace;
+import es.upm.dit.adsw.trenes.Monitor;
+import es.upm.dit.adsw.trenes.Terreno;
+import es.upm.dit.adsw.trenes.Tren;
 import es.upm.dit.adsw.trenes.tramos.Tramo;
 
 import java.awt.*;
@@ -35,11 +38,17 @@ public class Escenario4 {
         agujas02.setRecto();
 
         Monitor tunel = new MonitorTunel();
-        terreno.ponMonitor(agujas01, Enlace.W, tunel, 1);
-        terreno.ponMonitor(agujas01, Enlace.N, tunel, 1);
-        terreno.ponMonitor(agujas02, Enlace.E, tunel, 1);
-        terreno.ponMonitor(agujas02, Enlace.S, tunel, 2);
-        terreno.ponMonitor(agujas01, Enlace.W, tunel, 2);
+        // tag 1: direccion agujas01 -> agujas02
+        terreno.ponMonitorEntrada(agujas01, Enlace.N, tunel, 1);
+        terreno.ponMonitorEntrada(agujas01, Enlace.W, tunel, 1);
+        terreno.ponMonitorSalida(agujas02, Enlace.S, tunel, 1);
+        terreno.ponMonitorSalida(agujas02, Enlace.E, tunel, 1);
+
+        // tag 2: direccion agujas02 -> agujas01
+        terreno.ponMonitorEntrada(agujas02, Enlace.S, tunel, 2);
+        terreno.ponMonitorEntrada(agujas02, Enlace.E, tunel, 2);
+        terreno.ponMonitorSalida(agujas01, Enlace.N, tunel, 2);
+        terreno.ponMonitorSalida(agujas01, Enlace.W, tunel, 2);
 
         Tren tren11 = new Tren("Talgo 1", Color.RED);
         tren11.setVelocidad(0.9);

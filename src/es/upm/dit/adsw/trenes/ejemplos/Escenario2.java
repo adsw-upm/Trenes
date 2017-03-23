@@ -2,10 +2,13 @@ package es.upm.dit.adsw.trenes.ejemplos;
 
 /**
  * @author Jose A. Manas
- * @version 11/2/2012
+ * @version 21.3.2017
  */
 
-import es.upm.dit.adsw.trenes.*;
+import es.upm.dit.adsw.trenes.Enlace;
+import es.upm.dit.adsw.trenes.Monitor;
+import es.upm.dit.adsw.trenes.Terreno;
+import es.upm.dit.adsw.trenes.Tren;
 import es.upm.dit.adsw.trenes.tramos.Tramo;
 
 import java.awt.*;
@@ -32,11 +35,15 @@ public class Escenario2 {
         cambio43.setDesvio();
 
         Monitor tunel = new MonitorTunel();
-        terreno.ponMonitor(cambio23, Enlace.W, tunel, 1);
-        terreno.ponMonitor(cambio23, Enlace.N, tunel, 1);
-        terreno.ponMonitor(cambio43, Enlace.N, tunel, 1);
-        terreno.ponMonitor(cambio43, Enlace.E, tunel, 2);
-        terreno.ponMonitor(cambio23, Enlace.W, tunel, 2);
+        terreno.ponMonitorEntrada(cambio23, Enlace.N, tunel, 1);
+        terreno.ponMonitorEntrada(cambio23, Enlace.W, tunel, 1);
+        terreno.ponMonitorSalida(cambio43, Enlace.N, tunel, 1);
+        terreno.ponMonitorSalida(cambio43, Enlace.E, tunel, 1);
+
+        terreno.ponMonitorEntrada(cambio43, Enlace.N, tunel, 2);
+        terreno.ponMonitorEntrada(cambio43, Enlace.E, tunel, 2);
+        terreno.ponMonitorSalida(cambio23, Enlace.N, tunel, 2);
+        terreno.ponMonitorSalida(cambio23, Enlace.W, tunel, 2);
 
         Tren tren11 = new Tren("Talgo 1", Color.RED);
         tren11.setVelocidad(0.9);

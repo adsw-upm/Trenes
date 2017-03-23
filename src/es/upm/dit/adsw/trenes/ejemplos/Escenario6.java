@@ -2,7 +2,7 @@ package es.upm.dit.adsw.trenes.ejemplos;
 
 /**
  * @author Jose A. Manas
- * @version 11/2/2012
+ * @version 21.3.2017
  */
 
 import es.upm.dit.adsw.trenes.Terreno;
@@ -37,10 +37,10 @@ public class Escenario6 {
         aguja42.setDesvio();
 
         Semaphore semaforoTunel = new Semaphore(1);
-        terreno.ponSemaforo(aguja22, N, semaforoTunel);
-        terreno.ponSemaforo(aguja22, W, semaforoTunel);
-        terreno.ponSemaforo(aguja42, S, semaforoTunel);
-        terreno.ponSemaforo(aguja42, E, semaforoTunel);
+        terreno.ponSemaforoEntrada(aguja22, W, semaforoTunel);
+        terreno.ponSemaforoSalida(aguja42, S, semaforoTunel);
+        terreno.ponSemaforoEntrada(aguja42, E, semaforoTunel);
+        terreno.ponSemaforoSalida(aguja22, N, semaforoTunel);
 
         Tren tren11 = new Tren("Talgo 1", Color.RED);
         tren11.setVelocidad(0.9);

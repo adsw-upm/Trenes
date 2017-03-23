@@ -2,7 +2,7 @@ package es.upm.dit.adsw.trenes.ejemplos;
 
 /**
  * @author Jose A. Manas
- * @version 11/2/2012
+ * @version 21.3.2017
  */
 
 import es.upm.dit.adsw.trenes.Terreno;
@@ -34,8 +34,8 @@ public class Escenario1 {
         Tramo estacion2 = terreno.get(3, 3);
 
         Semaphore semaforo = new Semaphore(1);
-        terreno.ponSemaforo(estacion1, W, semaforo);
-        terreno.ponSemaforo(estacion2, E, semaforo);
+        terreno.ponSemaforoEntrada(estacion1, W, semaforo);
+        terreno.ponSemaforoSalida(estacion2, E, semaforo);
 
         Tren tren1 = new Tren("Talgo", Color.RED);
         tren1.setVelocidad(0.4);

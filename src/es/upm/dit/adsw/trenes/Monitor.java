@@ -2,12 +2,9 @@ package es.upm.dit.adsw.trenes;
 
 import es.upm.dit.adsw.trenes.tramos.Tramo;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Jose A. Manas
- * @version 5.12.2015
+ * @version 21.3.2017
  */
 public abstract class Monitor {
 

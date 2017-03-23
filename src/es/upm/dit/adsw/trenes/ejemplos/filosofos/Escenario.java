@@ -32,14 +32,14 @@ public class Escenario {
         Terreno terreno = new Terreno(mapa);
 
         Monitor monitor = new Controlador(4);
-        terreno.ponMonitor(2, 4, Enlace.W, monitor, 0);
-        terreno.ponMonitor(1, 2, Enlace.W, monitor, 0);
-        terreno.ponMonitor(4, 3, Enlace.N, monitor, 1);
-        terreno.ponMonitor(2, 4, Enlace.N, monitor, 1);
-        terreno.ponMonitor(3, 1, Enlace.E, monitor, 2);
-        terreno.ponMonitor(4, 3, Enlace.E, monitor, 2);
-        terreno.ponMonitor(1, 2, Enlace.S, monitor, 3);
-        terreno.ponMonitor(3, 1, Enlace.S, monitor, 3);
+        terreno.ponMonitorEntrada(2, 4, Enlace.W, monitor, 0);
+        terreno.ponMonitorSalida(1, 2, Enlace.W, monitor, 0);
+        terreno.ponMonitorEntrada(4, 3, Enlace.N, monitor, 1);
+        terreno.ponMonitorSalida(2, 4, Enlace.N, monitor, 1);
+        terreno.ponMonitorEntrada(3, 1, Enlace.E, monitor, 2);
+        terreno.ponMonitorSalida(4, 3, Enlace.E, monitor, 2);
+        terreno.ponMonitorEntrada(1, 2, Enlace.S, monitor, 3);
+        terreno.ponMonitorSalida(3, 1, Enlace.S, monitor, 3);
 
         Tren filo1 = new Tren("filosofo 1", Color.RED);
         filo1.setVelocidad(1);

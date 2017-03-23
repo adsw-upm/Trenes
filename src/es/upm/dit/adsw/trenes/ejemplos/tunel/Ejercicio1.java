@@ -2,7 +2,7 @@ package es.upm.dit.adsw.trenes.ejemplos.tunel;
 
 /**
  * @author Jose A. Manas
- * @version 4.12.2015
+ * @version 21.3.2017
  */
 
 import es.upm.dit.adsw.trenes.Enlace;
@@ -37,16 +37,23 @@ public class Ejercicio1 {
         agujas01.setRecto();
         agujas02.setRecto();
 
-//        Monitor tunel = new MonitorTunel();
+        Monitor tunel = new MonitorTunel();
 //        Monitor tunel = new MonitorTunel_1();
 //        Monitor tunel = new MonitorTunel_2();
 //        Monitor tunel = new MonitorTunel_3();
-        Monitor tunel = new MonitorTunel_4();
+//        Monitor tunel = new MonitorTunel_4();
 
-        terreno.ponMonitor(agujas01, Enlace.N, tunel, 1);
-        terreno.ponMonitor(agujas02, Enlace.E, tunel, 1);
-        terreno.ponMonitor(agujas02, Enlace.S, tunel, 2);
-        terreno.ponMonitor(agujas01, Enlace.W, tunel, 2);
+        // tag 1: direccion agujas01 -> agujas02
+        terreno.ponMonitorEntrada(agujas01, Enlace.N, tunel, 1);
+        terreno.ponMonitorEntrada(agujas01, Enlace.W, tunel, 1);
+        terreno.ponMonitorSalida(agujas02, Enlace.S, tunel, 1);
+        terreno.ponMonitorSalida(agujas02, Enlace.E, tunel, 1);
+
+        // tag 2: direccion agujas02 -> agujas01
+        terreno.ponMonitorEntrada(agujas02, Enlace.S, tunel, 2);
+        terreno.ponMonitorEntrada(agujas02, Enlace.E, tunel, 2);
+        terreno.ponMonitorSalida(agujas01, Enlace.N, tunel, 2);
+        terreno.ponMonitorSalida(agujas01, Enlace.W, tunel, 2);
 
         Tren tren11 = new Tren("Talgo 1", Color.RED);
         tren11.setVelocidad(1.0);

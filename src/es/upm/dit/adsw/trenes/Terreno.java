@@ -5,12 +5,14 @@ import es.upm.dit.adsw.trenes.ui.GUI;
 import es.upm.dit.adsw.trenes.ui.PanelTrenes;
 
 import javax.swing.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 
 /**
  * @author Jose A. Manas
- * @version 4.12.2015
+ * @version 21.3.2017
  */
 public class Terreno {
     private final Tramo[][] mapa;
@@ -18,8 +20,10 @@ public class Terreno {
     private final int dimY;
 
     private final List<Tren> trenes = new ArrayList<Tren>();
-    private final List<TES> semaforos = new ArrayList<TES>();
-    private final List<TEM> monitores = new ArrayList<TEM>();
+    private final List<TES> semaforosEntradas = new ArrayList<TES>();
+    private final List<TES> semaforosSalidas = new ArrayList<TES>();
+    private final List<TEM> monitoresEntradas = new ArrayList<TEM>();
+    private final List<TEM> monitoresSalidas = new ArrayList<TEM>();
 
     private JFrame frame;
     private GUI gui;
@@ -195,21 +199,38 @@ public class Terreno {
     }
 
     /**
-     * Se coloca un semaforo en el tramo y enlace indicados.
+     * Se coloca un semaforo en la entrada del tramo y enlace indicados.
      * El semaforo se pinta segun se entra a la derecha.
      * El semaforo recive una llamada P cuando entren entra por ese enlace.
-     * El semaforo recibe una llamada V cuando el tren sale por ese enlace.
      *
-     * @param tramo tramo en el que se pone el semaforo.
-     * @param enlace enlace del tramo por el que se considera el semaforo.
+     * @param tramo    tramo en el que se pone el semaforo.
+     * @param enlace   enlace del tramo por el que se considera el semaforo.
      * @param semaforo el semaforo que controla entradas y salidas por ese punto.
      */
-    public void ponSemaforo(Tramo tramo, Enlace enlace, Semaphore semaforo) {
-        semaforos.add(new TES(tramo, enlace, semaforo));
+    public void ponSemaforoEntrada(Tramo tramo, Enlace enlace, Semaphore semaforo) {
+        semaforosEntradas.add(new TES(tramo, enlace, semaforo));
     }
 
-    public List<TES> getSemaforos() {
-        return semaforos;
+    /**
+     * Se coloca un semaforo en la salida del tramo y enlace indicados.
+     * Hablando con precision no es una luz, sino un sensor-
+     * El sensor se pinta segun se entra a la derecha, como un cuadrado vacio.
+     * El semaforo recibe una llamada V cuando el tren sale por ese enlace.
+     *
+     * @param tramo    tramo en el que se pone el semaforo.
+     * @param enlace   enlace del tramo por el que se considera el semaforo.
+     * @param semaforo el semaforo que controla entradas y salidas por ese punto.
+     */
+    public void ponSemaforoSalida(Tramo tramo, Enlace enlace, Semaphore semaforo) {
+        semaforosSalidas.add(new TES(tramo, enlace, semaforo));
+    }
+
+    public Collection<TES> getSemaforosEntradas() {
+        return semaforosEntradas;
+    }
+
+    public Collection<TES> getSemaforosSalidas() {
+        return semaforosSalidas;
     }
 
     public void setVisible() {
@@ -234,56 +255,100 @@ public class Terreno {
     }
 
     /**
-     * Pone un sensor en un enlace de un tramo y lo asocia a un monitor con un tag.
-     * @param x coordenada X del tramo que se monitoriza.
-     * @param y coordenada Y del tramo que se monitoriza.
-     * @param enlace se monitorizan entradas y salidas por este enlace.
-     * @param monitor monitor que atiende a los trenes que entran y salen.
-     * @param tag pista para el monitor.
+     * Pone un sensor en un enlace de entrada de un tramo y lo asocia a un monitor con un tag.
+     *
+     * @param x       coordenada X del tramo que se monitoriza.
+     * @param y       coordenada Y del tramo que se monitoriza.
+     * @param enlace  se monitorizan las entradas por este enlace.
+     * @param monitor monitor que atiende a los trenes que entran.
+     * @param tag     pista para el monitor.
      */
-    public void ponMonitor(int x, int y, Enlace enlace, Monitor monitor, int tag) {
+    public void ponMonitorEntrada(int x, int y, Enlace enlace, Monitor monitor, int tag) {
         Tramo tramo = get(x, y);
         if (tramo == null) {
             String mensaje = String.format("no hay vía (%d, %d)", x, y);
-            String title = String.format("ponMonitor(%s)", monitor.getClass().getSimpleName());
+            String title = String.format("ponMonitorEntrada(%s)", monitor.getClass().getSimpleName());
             JOptionPane.showMessageDialog(null,
                     mensaje, title,
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
-        ponMonitor(tramo, enlace, monitor, tag);
+        ponMonitorEntrada(tramo, enlace, monitor, tag);
     }
 
     /**
-     * Pone un sensor en un enlace de un tramo y lo asocia a un monitor con un tag.
-     * @param tramo tramo que se monitoriza.
-     * @param enlace se monitorizan entradas y salidas por este enlace.
-     * @param monitor monitor que atiende a los trenes que entran y salen.
-     * @param tag pista para el monitor.
+     * Pone un sensor en un enlace de salida de un tramo y lo asocia a un monitor con un tag.
+     *
+     * @param x       coordenada X del tramo que se monitoriza.
+     * @param y       coordenada Y del tramo que se monitoriza.
+     * @param enlace  se monitorizan las salidas por este enlace.
+     * @param monitor monitor que atiende a los trenes que salen.
+     * @param tag     pista para el monitor.
      */
-    public void ponMonitor(Tramo tramo, Enlace enlace, Monitor monitor, int tag) {
-        if (!tramo.hayEntrada(enlace)) {
-            String mensaje = String.format("%s: no hay enlace %s", tramo, enlace);
-            String title = String.format("ponMonitor(%s)", monitor.getClass().getSimpleName());
+    public void ponMonitorSalida(int x, int y, Enlace enlace, Monitor monitor, int tag) {
+        Tramo tramo = get(x, y);
+        if (tramo == null) {
+            String mensaje = String.format("no hay vía (%d, %d)", x, y);
+            String title = String.format("ponMonitorSalida(%s)", monitor.getClass().getSimpleName());
             JOptionPane.showMessageDialog(null,
                     mensaje, title,
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
-        monitores.add(new TEM(tramo, enlace, monitor, tag));
+        ponMonitorSalida(tramo, enlace, monitor, tag);
+    }
+
+    /**
+     * Pone un sensor en un enlace de entrada de un tramo y lo asocia a un monitor con un tag.
+     *
+     * @param tramo   tramo que se monitoriza.
+     * @param enlace  se monitorizan las entradas por este enlace.
+     * @param monitor monitor que atiende a los trenes que entran.
+     * @param tag     pista para el monitor.
+     */
+    public void ponMonitorEntrada(Tramo tramo, Enlace enlace, Monitor monitor, int tag) {
+        if (!tramo.hayEntrada(enlace)) {
+            String mensaje = String.format("%s: no hay enlace %s", tramo, enlace);
+            String title = String.format("ponMonitorEntrada(%s)", monitor.getClass().getSimpleName());
+            JOptionPane.showMessageDialog(null,
+                    mensaje, title,
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        monitoresEntradas.add(new TEM(tramo, enlace, monitor, tag));
+    }
+
+    /**
+     * Pone un sensor en un enlace de salida de un tramo y lo asocia a un monitor con un tag.
+     *
+     * @param tramo   tramo que se monitoriza.
+     * @param enlace  se monitorizan las salidas por este enlace.
+     * @param monitor monitor que atiende a los trenes que salen.
+     * @param tag     pista para el monitor.
+     */
+    public void ponMonitorSalida(Tramo tramo, Enlace enlace, Monitor monitor, int tag) {
+        if (!tramo.hayEntrada(enlace)) {
+            String mensaje = String.format("%s: no hay enlace %s", tramo, enlace);
+            String title = String.format("ponMonitorSalida(%s)", monitor.getClass().getSimpleName());
+            JOptionPane.showMessageDialog(null,
+                    mensaje, title,
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        monitoresSalidas.add(new TEM(tramo, enlace, monitor, tag));
     }
 
     public void entro(Tren tren, Tramo tramo, Enlace entrada) {
         if (tramo == null || entrada == null)
             return;
-        for (TES tes: semaforos) {
+        for (TES tes : semaforosEntradas) {
             if (tes.tramo.equals(tramo) && tes.enlace.equals(entrada))
                 try {
                     tes.semaforo.acquire();
                 } catch (InterruptedException ignored) {
                 }
         }
-        for (TEM tem : monitores) {
+        for (TEM tem : monitoresEntradas) {
             if (tem.tramo.equals(tramo) && tem.enlace.equals(entrada))
                 tem.monitor.entro(tem.tag, tren, tramo, entrada);
         }
@@ -292,11 +357,11 @@ public class Terreno {
     public void salgo(Tren tren, Tramo tramo, Enlace salida) {
         if (tramo == null || salida == null)
             return;
-        for (TEM tem : monitores) {
+        for (TEM tem : monitoresSalidas) {
             if (tem.tramo.equals(tramo) && tem.enlace.equals(salida))
                 tem.monitor.salgo(tem.tag, tren, tramo, salida);
         }
-        for (TES tes: semaforos) {
+        for (TES tes : semaforosSalidas) {
             if (tes.tramo.equals(tramo) && tes.enlace.equals(salida))
                 tes.semaforo.release();
         }

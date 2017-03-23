@@ -1,6 +1,9 @@
 package es.upm.dit.adsw.trenes.ui;
 
-import es.upm.dit.adsw.trenes.*;
+import es.upm.dit.adsw.trenes.Enlace;
+import es.upm.dit.adsw.trenes.TES;
+import es.upm.dit.adsw.trenes.Terreno;
+import es.upm.dit.adsw.trenes.Tren;
 import es.upm.dit.adsw.trenes.tramos.Tramo;
 
 import javax.swing.*;
@@ -92,7 +95,7 @@ public class GUI
         }
 
         // semaforos
-        for (TES te : terreno.getSemaforos()) {
+        for (TES te : terreno.getSemaforosEntradas()) {
             Tramo tramo = te.tramo;
             Enlace enlace = te.enlace;
             Semaphore semaforo = te.semaforo;
@@ -103,6 +106,16 @@ public class GUI
             g.fillOval(nwx, nwy, SEM_DIAM, SEM_DIAM);
             g.setColor(Color.BLACK);
             g.drawOval(nwx, nwy, SEM_DIAM, SEM_DIAM);
+        }
+        for (TES te : terreno.getSemaforosSalidas()) {
+            Tramo tramo = te.tramo;
+            Enlace enlace = te.enlace;
+            Semaphore semaforo = te.semaforo;
+            nwx = getSemaforoNWX(tramo, enlace);
+            nwy = getSemaforoNWY(tramo, enlace);
+            Color color = Color.WHITE;
+            g.setColor(Color.BLACK);
+            g.drawRect(nwx - 1, nwy - 1, SEM_DIAM + 2, SEM_DIAM + 2);
         }
 
         // trenes

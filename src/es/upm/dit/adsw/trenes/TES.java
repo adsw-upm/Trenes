@@ -6,6 +6,7 @@ import java.util.concurrent.Semaphore;
 
 /**
  * Tramo-Enlace-Semaforo
+ *
  * @author Jose A. Manas
  * @version 5.12.2015
  */
